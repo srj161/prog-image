@@ -1,0 +1,66 @@
+version: '2.2'
+services:
+    mongo:
+        hostname: mongo
+        image: mongo
+        volumes:
+            - data-mongo:/data/mongo
+        ports:
+            - "27017:27017"
+
+    nameko-service-base:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - PYTHONPATH=/srv/prog-image/prog_image
+        working_dir: /srv/prog-image/prog_image
+        volumes:
+            - .:/srv/prog-image
+
+    api-service:
+        extends:
+            service: nameko-service-base
+        command: nameko run --config=../nameko-config.yml services:HttpAPIService
+        ports:
+            - "8000:8000"
+
+    image-grayscale-service:
+        extends:
+            service: nameko-service-base
+        command: nameko run --config=../nameko-config.yml services:ImageConvertGrayScaleService
+
+    image-mirror-service:
+        extends:
+            service: nameko-service-base
+        command: nameko run --config=../nameko-config.yml services:ImageConvertMirrorService
+
+    image-convert-jpeg-service:
+        extends:
+            service: nameko-service-base
+        command: nameko run --config=../nameko-config.yml services:ImageConvertJpegService
+
+    image-convert-png-service:
+        extends:
+            service: nameko-service-base
+        command: nameko run --config=../nameko-config.yml services:ImageConvertPNGService
+
+    image-upload-service:
+        extends:
+            service: nameko-service-base
+        command: nameko run --config=../nameko-config.yml services:ImageUploadService
+
+    rabbitmq:
+        image: rabbitmq:3.7-management
+        hostname: rabbitmq
+        container_name: rabbitmq
+        hostname: rabbitmq
+        volumes:
+            - data-rabbitmq:/var/lib/rabbitmq
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+
+volumes:
+    data-mongo:
+    data-rabbitmq:

@@ -1,0 +1,3 @@
+AMQP_URI: amqp://${RABBIT_USER:guest}:${RABBIT_PASSWORD:guest}@${RABBIT_HOST:rabbitmq}:${RABBIT_PORT:5672}/
+MONGODB_URI: mongodb://mongo:27017/prog-image
+serializer: pickle
