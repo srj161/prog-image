@@ -1,5 +1,5 @@
 mongoengine==0.19.1
 nameko==2.12.0
 nameko-mongoengine==0.1.1
-pillow==7.1.1
+pillow==9.0.0
 pytest==5.4.1
